@@ -1,0 +1,18 @@
+{
+  "name": "file-watcher-res",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --env-file .env index.js",
+    "nodemon": "node --env-file .env --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "node-fetch": "3.3.2"
+  },
+  "type": "module"
+}
