@@ -43,29 +43,26 @@ async function convertREStoJSON(filePath) {
       const fields = line.split(";");
 
       // Construir el objeto JSON a partir de los campos
-      const record = {
-        id: fields[0].trim(),
-        status: fields[8].trim(),
-        type: fields[1].trim(),
-        name: fields[2].trim(),
-        date: fields[6].trim(),
-        time: fields[7].trim(),
-        quantity: fields[9].trim(),
-        measurements: [],
+      let record = {
+        "ID muestr": fields[0].trim(),
+        Fecha: fields[6].trim(),
       };
+
+      const measurements = {};
 
       // Extraer los datos de las mediciones
       for (let i = 10; i < fields.length; i += 3) {
         // Incrementar i de 3 en 3
         if (fields[i].trim() !== "" && fields[i + 1] && fields[i + 2]) {
           // Asegurarse de que haya 3 campos
-          record.measurements.push({
-            name: fields[i].trim(),
-            value: fields[i + 1].trim(),
-            unit: fields[i + 2].trim(),
-          });
+          const measurementKey =
+            fields[i].trim() + " (" + fields[i + 2].trim() + ")";
+          measurements[measurementKey] = fields[i + 1].trim();
         }
       }
+
+      // Asignar las mediciones a record como propiedades
+      record = { ...record, ...measurements };
 
       // Agregar el objeto al array de datos
       jsonData.push(record);
