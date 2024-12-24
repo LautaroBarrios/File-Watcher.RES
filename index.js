@@ -50,6 +50,15 @@ async function convertREStoJSON(filePath) {
 
       const measurements = {};
 
+      const decimals = {
+        FOS: 1,
+        "CA As": 1,
+        ALB: 2,
+        PT: 2,
+      };
+
+      const specialDecimals = ["CRE L"];
+
       // Extraer los datos de las mediciones
       for (let i = 10; i < fields.length; i += 3) {
         // Incrementar i de 3 en 3
@@ -57,7 +66,21 @@ async function convertREStoJSON(filePath) {
           // Asegurarse de que haya 3 campos
           const measurementKey =
             fields[i].trim() + " (" + fields[i + 2].trim() + ")";
-          measurements[measurementKey] = fields[i + 1].trim();
+          if (decimals[fields[i].trim()]) {
+            measurements[measurementKey] = parseFloat(
+              Number(fields[i + 1].trim().replace(",", ".")).toFixed(
+                decimals[fields[i].trim()]
+              )
+            );
+          } else if (specialDecimals.includes(fields[i].trim())) {
+            measurements[measurementKey] = Number(
+              fields[i + 1].trim().replace(",", ".")
+            );
+          } else {
+            measurements[measurementKey] = Math.round(
+              Number(fields[i + 1].trim().replace(",", "."))
+            );
+          }
         }
       }
 
