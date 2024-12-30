@@ -54,7 +54,7 @@ async function convertREStoJSON(filePath) {
         FOS: 1,
         "CA As": 1,
         ALB: 2,
-        PT: 2,
+        PRO: 2,
       };
 
       const specialDecimals = ["CRE L"];
