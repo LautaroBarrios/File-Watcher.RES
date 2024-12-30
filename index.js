@@ -67,15 +67,15 @@ async function convertREStoJSON(filePath) {
           const measurementKey =
             fields[i].trim() + " (" + fields[i + 2].trim() + ")";
           if (decimals[fields[i].trim()]) {
-            measurements[measurementKey] = parseFloat(
-              Number(fields[i + 1].trim().replace(",", ".")).toFixed(
-                decimals[fields[i].trim()]
-              )
-            );
-          } else if (specialDecimals.includes(fields[i].trim())) {
             measurements[measurementKey] = Number(
               fields[i + 1].trim().replace(",", ".")
-            );
+            )
+              .toFixed(decimals[fields[i].trim()])
+              .replace(".", ",");
+          } else if (specialDecimals.includes(fields[i].trim())) {
+            measurements[measurementKey] = String(
+              Number(fields[i + 1].trim().replace(",", "."))
+            ).replace(".", ",");
           } else {
             measurements[measurementKey] = Math.round(
               Number(fields[i + 1].trim().replace(",", "."))
