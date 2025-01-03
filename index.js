@@ -124,8 +124,8 @@ async function sendFileToAPI(filePath) {
     }
 
     // Mostrar la respuesta de la API
-    // const responseData = await response.json();
-    // console.log(`\x1b[96m     Respuesta de la API:\x1b[0m`, responseData);
+    const responseData = await response.json();
+    console.log(`\x1b[96m     Respuesta de la API:\x1b[0m`, responseData);
 
     console.log(
       `\x1b[92m     OK - Archivo \x1b[93m${fileName} \x1b[92menviado exitosamente.\x1b[0m`
