@@ -7,7 +7,7 @@ Este programa está diseñado para monitorear una carpeta en busca de nuevos arc
 > ## ⚠️ **IMPORTANTE**
 >
 > Si no se cambian las rutas de acuerdo al ordenador local va a arrojar error (`const result = binding.mkdir()`).
-> Al no tener una URL de API va a arrojar un error hasta que se ingrese una correcta o modifique la función `sendFileToAPI()` que se encuentra a partir de la línea 107 para que haga lo que usted desea con los datos. **También, puede descomentar la línea 112 para ver qué datos se enviarían sin la necesidad de colocar una URL de API aún(ten en cuenta que no se borrarán los archivos de la carpeta en caso de utilizar esa línea).**
+> Al no tener una URL de API va a arrojar un error hasta que se ingrese una correcta o modifique la función `sendFileToAPI()` que se encuentra a partir de la línea 112 para que haga lo que usted desea con los datos. **También, puede descomentar la línea 127 para ver qué datos se enviarían sin la necesidad de colocar una URL de API aún(ten en cuenta que no se borrarán los archivos de la carpeta en caso de utilizar esa línea).**
 
 ## 🎯 Acciones
 

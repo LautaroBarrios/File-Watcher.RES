@@ -3,13 +3,7 @@ import path from "path";
 import fetch from "node-fetch";
 
 // Ruta de la carpeta a monitorizar
-const directoryPath = path.join(
-  "C:",
-  "Users",
-  "IngresaTuUsuarioAqui",
-  "Desktop",
-  "FilesWatcherRES"
-); // Cambia esta ruta a tu carpeta de archivos .RES
+const directoryPath = path.join("C:", "Quimica"); // Cambia esta ruta a tu carpeta de archivos .RES
 const apiEndpoint = process.env.API; // URL a la que se envían los archivos
 const maxRetries = 5; // Número máximo de reintentos
 const retryInterval = 60000; // Tiempo entre máximo entre reintentos (1 minuto)
@@ -54,7 +48,7 @@ async function convertREStoJSON(filePath) {
         FOS: 1,
         "CA As": 1,
         ALB: 2,
-        PRO: 2,
+        PT: 2,
       };
 
       const specialDecimals = ["CRE L"];
@@ -185,16 +179,28 @@ async function deleteFile(filePath) {
 }
 
 // Monitorizar la carpeta en busca de archivos nuevos
+
+const filesInProcess = new Set(); // Objeto para rastrear archivos en proceso
+
 fs.watch(directoryPath, (eventType, filename) => {
   if (eventType === "rename" && filename.endsWith(".RES")) {
     const filePath = path.join(directoryPath, filename);
 
+    // Verificar si el archivo ya está en proceso
+    if (filesInProcess.has(filePath)) {
+      return; // Salir si ya está siendo procesado
+    }
+
     // Verificar si el archivo existe (evita procesar eliminaciones)
     if (fs.existsSync(filePath)) {
+      filesInProcess.add(filePath); // Marcar como en proceso
       console.log(
         `\x1b[32m  BÚSQUEDA - Nuevo archivo detectado: \x1b[93m${filename}\x1b[0m`
       );
-      retrySendFileToAPI(filePath); // Llamar a la función de reintento
+
+      retrySendFileToAPI(filePath)
+        .catch((err) => console.error(err))
+        .finally(() => filesInProcess.delete(filePath)); // Liberar al finalizar
     }
   }
 });
