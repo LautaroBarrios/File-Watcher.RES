@@ -14,6 +14,12 @@ if (!fs.existsSync(directoryPath)) {
   console.log(`\x1b[92m Carpeta creada en: \x1b[93m${directoryPath}\x1b[0m`);
 }
 
+// Función para formatear la fecha de mm/dd/yy a dd/mm/yy
+function formatDate(dateString) {
+  const [mm, dd, yy] = dateString.split("/");
+  return `${dd}/${mm}/${yy}`;
+}
+
 // Función para convertir un archivo .RES a JSON
 async function convertREStoJSON(filePath) {
   try {
@@ -39,7 +45,7 @@ async function convertREStoJSON(filePath) {
       // Construir el objeto JSON a partir de los campos
       let record = {
         "ID muestr": fields[0].trim(),
-        Fecha: fields[6].trim(),
+        Fecha: formatDate(fields[6].trim()),
       };
 
       const measurements = {};
