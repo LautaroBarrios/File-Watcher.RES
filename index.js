@@ -5,8 +5,8 @@ import fetch from "node-fetch";
 // Ruta de la carpeta a monitorizar
 const directoryPath = path.join("C:", "Quimica"); // Cambia esta ruta a tu carpeta de archivos .RES
 const apiEndpoint = process.env.API; // URL a la que se envían los archivos
-const maxRetries = 5; // Número máximo de reintentos
-const retryInterval = 60000; // Tiempo entre máximo entre reintentos (1 minuto)
+const maxRetries = 3; // Número máximo de reintentos
+const retryInterval = 1; // Tiempo entre máximo entre reintentos (1 ms)
 
 // Crear la carpeta si no existe
 if (!fs.existsSync(directoryPath)) {
@@ -44,7 +44,7 @@ async function convertREStoJSON(filePath) {
 
       // Construir el objeto JSON a partir de los campos
       let record = {
-        "ID muestr": fields[0].trim(),
+        "ID muestr": fields[2].trim(),
         Fecha: formatDate(fields[6].trim()),
       };
 
@@ -55,6 +55,7 @@ async function convertREStoJSON(filePath) {
         "CA As": 1,
         ALB: 2,
         PT: 2,
+        "CRE L": 2,
       };
 
       const specialDecimals = ["CRE L"];
@@ -151,7 +152,7 @@ async function retrySendFileToAPI(filePath, retries = 0) {
       console.log(
         `\x1b[93m     ESPERA - Reintentando (${
           retries + 1
-        }/${maxRetries}) en 1 minuto...\x1b[0m`
+        }/${maxRetries}) en 1 ms...\x1b[0m`
       );
       setTimeout(
         () => retrySendFileToAPI(filePath, retries + 1),
