@@ -45,7 +45,9 @@ async function convertREStoJSON(filePath) {
       // Construir el objeto JSON a partir de los campos
       let record = {
         "ID muestr":
-          fields[2].trim() === "" ? fields[0].trim() : fields[2].trim(),
+          fields[2].trim() === "" || isNaN(Number(fields[2].trim()))
+            ? fields[0].trim()
+            : fields[2].trim(),
         Fecha: formatDate(fields[6].trim()),
       };
 
