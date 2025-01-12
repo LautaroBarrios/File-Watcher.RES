@@ -193,27 +193,33 @@ async function deleteFile(filePath) {
 const filesInProcess = new Set(); // Objeto para rastrear archivos en proceso
 
 fs.watch(directoryPath, (eventType, filename) => {
-  if (eventType === "rename" && filename.endsWith(".RES")) {
-    const filePath = path.join(directoryPath, filename);
+  if (eventType !== "rename" || !filename.endsWith(".RES")) return;
 
-    // Verificar si el archivo ya está en proceso
-    if (filesInProcess.has(filePath)) {
-      return; // Salir si ya está siendo procesado
-    }
+  const filePath = path.join(directoryPath, filename);
 
-    // Verificar si el archivo existe (evita procesar eliminaciones)
+  if (filesInProcess.has(filePath)) {
+    return; // Evita procesar el mismo archivo varias veces
+  }
+
+  filesInProcess.add(filePath); // Marca el archivo como en proceso
+
+  console.log(`\x1b[32m  CARGANDO - Espere 5 segundos\x1b[0m`);
+
+  setTimeout(() => {
     if (fs.existsSync(filePath)) {
-      filesInProcess.add(filePath); // Marcar como en proceso
       console.log(
         `\x1b[32m  BÚSQUEDA - Nuevo archivo detectado: \x1b[93m${filename}\x1b[0m`
       );
 
       retrySendFileToAPI(filePath)
         .catch((err) => console.error(err))
-        .finally(() => filesInProcess.delete(filePath)); // Liberar al finalizar
+        .finally(() => filesInProcess.delete(filePath)); // Libera el archivo
+    } else {
+      filesInProcess.delete(filePath); // Libera el archivo si no existe
     }
-  }
+  }, 5000);
 });
+
 
 // Mensaje de confirmación cuando la aplicación está montada y funcionando
 console.log("\x1b[96m ██████╗░███████╗░██████╗\x1b[0m");
